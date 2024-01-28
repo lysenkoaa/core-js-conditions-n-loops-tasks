@@ -180,7 +180,7 @@ function convertToRomanNumerals(num) {
  *  '10,5'    => 'one zero point five'
  *  '1950.2'  => 'one nine five zero point two'
  */
-function convertNumberToString(numberStr) {
+function convertNumberToString(numberStr, index = 0, result = '') {
   const digitWords = [
     'zero',
     'one',
@@ -193,25 +193,34 @@ function convertNumberToString(numberStr) {
     'eight',
     'nine',
   ];
-  let result = '';
 
-  for (let i = 0; i < numberStr.length; i += 1) {
-    const char = numberStr[i];
-
-    if (char === '-') {
-      result += 'minus ';
-    } else if (char === '.' || char === ',') {
-      result += 'point ';
-    } else {
-      const digit = Number(char);
-      result += `${digitWords[digit]}`;
-      if (i !== numberStr.length - 1) {
-        result += ' ';
-      }
+  let res1 = '';
+  if (index === numberStr.length) {
+    for (let i = 0; i < result.length - 1; i += 1) {
+      res1 += result[i];
     }
+    return res1;
   }
 
-  return result;
+  const char = numberStr[index];
+  let digit = 0;
+  let res2 = result;
+
+  switch (char) {
+    case '-':
+      res2 += 'minus ';
+      break;
+    case '.':
+    case ',':
+      res2 += 'point ';
+      break;
+    default:
+      digit = Number(char);
+      res2 += `${digitWords[digit]} `;
+      break;
+  }
+
+  return convertNumberToString(numberStr, index + 1, res2);
 }
 
 /**
